@@ -1,0 +1,50 @@
+class FenwickTree {
+private:
+    int n;
+    vector<long long> tree;
+ 
+public:
+    FenwickTree(int size) : n(size), tree(size + 1, 0) {}
+ 
+    void update(int idx, long long value){
+        while(idx <= n){
+            if(tree[idx] < value) tree[idx] = value;
+            else break;
+            idx += idx & -idx;
+        }
+    }
+ 
+    long long query(int idx) {
+        long long res = 0;
+        while(idx > 0) {
+            res = max(res, tree[idx]);
+            idx -= idx &-idx;
+        }
+        return res;
+    }
+};
+ 
+long long solve (int n, vector<int> nums) {
+   // Write your code here
+    if(nums.empty()) return 0;
+ 
+    vector<int> sorted(nums);
+    sort(sorted.begin(), sorted.end());
+    auto last = unique(sorted.begin(), sorted.end());
+    sorted.erase(last, sorted.end());
+ 
+    unordered_map<int, int> compress;
+    for(int i = 0; i < sorted.size(); i++) compress[sorted[i]] = i+1;
+ 
+    FenwickTree ft(sorted.size());
+    long long maxi = 0;
+ 
+    for(auto x : nums){
+        int idx = compress[x];
+        long long q = (idx > 1) ? ft.query(idx-1) : 0;
+        long long curr = q + x;
+        ft.update(idx, curr);
+        if(curr > maxi) maxi = curr;
+    }
+    return maxi;
+}
