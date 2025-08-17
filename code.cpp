@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
+#define int int64_t
 #define POS_MAX 1e18
 #define MOD 1000000007
 #define endl '\n'
@@ -24,53 +25,29 @@ void _print(double t) {cerr << t;}
 void _print(ull t) {cerr << t;}
  
 template <class T, class V> void _print(pair <T, V> p) {cerr << "{"; _print(p.first); cerr << ","; _print(p.second); cerr << "}";}
-template <class T> void _print(vector <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]";}
+template <class T> void _print(vector <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]"; cerr << endl;}
 template <class T> void _print(set <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]";}
 template <class T> void _print(multiset <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]";}
 template <class T, class V> void _print(map <T, V> v) {cerr << "[ "; for (auto i : v) {_print(i); cerr << " ";} cerr << "]";}
- 
+
 void solve(){
-    int n, m;
-    cin >> n >> m;
-    vector<int> a(n);
-    for(int &i : a) cin >> i;
-    
-// debug(a);
+    string a, b;
+    cin >> a >> b;
+    int n = a.length();
+    int m = b.length();
 
-    // vector<vector<int>> dp(n + 1, vector<int>(m+1, 0)); // n -> 1-n, m -> 1-m
-    vector<int> prev(m+1, 1), curr(m+1, 0);
-    prev[0] = 0;
-    if(a[0] != 0){
-        prev.assign(m+1, 0);
-        prev[a[0]] = 1;
-    }
+    vector<vector<int>> dp(n+1, vector<int>(m+1, 0));
+    for(int i = 0; i <= n; i++) dp[i][m] = n-i;
+    for(int j = 0; j <= m; j++) dp[n][j] = m-j;
 
-    // debug(prev);
-    // debug(curr);
-    for(int i = 2; i <= n; i++){
-        int num = a[i-1];
-        if(num != 0){
-            if(num - 1 > 0) curr[num] = (curr[num] + prev[num - 1]) % MOD;
-            curr[num] = (curr[num] + prev[num]) % MOD;
-            if(num + 1 <= m) curr[num] = (curr[num] + prev[num + 1]) % MOD; 
-        } 
-        else {
-            for(int j = 1; j <= m; j++){
-                if(j - 1 > 0) curr[j] = (curr[j] + prev[j - 1]) % MOD;
-                curr[j] = (curr[j] + prev[j]) % MOD;
-                if(j + 1 <= m) curr[j] = (curr[j] + prev[j + 1]) % MOD; 
-            }
+    for(int i = n-1; i >= 0; --i){
+        for(int j = m-1; j >= 0; --j){
+            if(a[i] == b[j]) dp[i][j] = dp[i+1][j+1];
+            else dp[i][j] = min(dp[i][j+1], min(dp[i+1][j], dp[i+1][j+1])) + 1;
         }
-        prev = curr;
-        curr.assign(m+1, 0);
     }
- 
-
-    // debug(prev);
-    int res = 0;
-    for(int i : prev) res = (res+i)%MOD;
-    cout << res << endl;
-
+    // debug(dp);
+    cout << dp[0][0] << endl;
 }
  
  
@@ -85,7 +62,7 @@ signed main() {
   freopen("output.txt","w",stdout);
   freopen("Error.txt", "w", stderr);
 #endif
-   solve(); 
+    solve(); 
    auto end = std::chrono::high_resolution_clock::now();
    auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
    cerr << "Time measured: " << elapsed.count() * 1e-9 << " seconds.\n";
