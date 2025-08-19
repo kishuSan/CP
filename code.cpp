@@ -30,26 +30,29 @@ template <class T> void _print(set <T> v) {cerr << "[ "; for (T i : v) {_print(i
 template <class T> void _print(multiset <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]";}
 template <class T, class V> void _print(map <T, V> v) {cerr << "[ "; for (auto i : v) {_print(i); cerr << " ";} cerr << "]";}
 
-void solve(){
-    string a, b;
-    cin >> a >> b;
-    int n = a.length();
-    int m = b.length();
+void solve() {
+    int n, m;
+    cin >> n >> m;
 
     vector<vector<int>> dp(n+1, vector<int>(m+1, 0));
-    for(int i = 0; i <= n; i++) dp[i][m] = n-i;
-    for(int j = 0; j <= m; j++) dp[n][j] = m-j;
 
-    for(int i = n-1; i >= 0; --i){
-        for(int j = m-1; j >= 0; --j){
-            if(a[i] == b[j]) dp[i][j] = dp[i+1][j+1];
-            else dp[i][j] = min(dp[i][j+1], min(dp[i+1][j], dp[i+1][j+1])) + 1;
+    for (int i = 1; i <= n; ++i) dp[i][1] = i - 1;
+    for (int j = 1; j <= m; ++j) dp[1][j] = j - 1;
+
+    for (int i = 2; i <= n; ++i) {
+        for (int j = 2; j <= m; ++j) {
+            if (i == j) { dp[i][j] = 0; continue; }
+
+            int mini = INT_MAX;
+            for (int k = 1; k <= i/2; ++k) mini = min(mini, 1 + dp[k][j] + dp[i-k][j]);
+            for (int k = 1; k <= j/2; ++k) mini = min(mini, 1 + dp[i][k] + dp[i][j-k]);
+            dp[i][j] = mini;
         }
     }
-    // debug(dp);
-    cout << dp[0][0] << endl;
+
+    cout << dp[n][m] << endl;
 }
- 
+
  
 signed main() {
    auto begin = std::chrono::high_resolution_clock::now();
