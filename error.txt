@@ -1,1 +1,1 @@
-Time measured: 0 seconds.
+Time measured: 0.001 seconds.

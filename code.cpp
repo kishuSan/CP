@@ -34,23 +34,54 @@ void solve() {
     int n, m;
     cin >> n >> m;
 
-    vector<vector<int>> dp(n+1, vector<int>(m+1, 0));
+    vector<vector<int>> a(n, vector<int>(m)); 
+    vector<vector<pair<bool, int>>> dp(n+1, vector<pair<bool, int>>(1024, {false, -1}));
 
-    for (int i = 1; i <= n; ++i) dp[i][1] = i - 1;
-    for (int j = 1; j <= m; ++j) dp[1][j] = j - 1;
-
-    for (int i = 2; i <= n; ++i) {
-        for (int j = 2; j <= m; ++j) {
-            if (i == j) { dp[i][j] = 0; continue; }
-
-            int mini = INT_MAX;
-            for (int k = 1; k <= i/2; ++k) mini = min(mini, 1 + dp[k][j] + dp[i-k][j]);
-            for (int k = 1; k <= j/2; ++k) mini = min(mini, 1 + dp[i][k] + dp[i][j-k]);
-            dp[i][j] = mini;
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+            cin >> a[i][j];
         }
     }
 
-    cout << dp[n][m] << endl;
+    // for(int i = 1; i <= 1023; i++) dp[0][i].first = true;    
+    dp[0][0].first = true;
+
+    for(int i = 1; i <= n; i++){
+        for(int x = 0; x <= 1023; x++){
+            for(int j = 0; j < m; j++){
+                if(dp[i-1][x ^ a[i-1][j]].first){
+                    dp[i][x].first = true;
+                    dp[i][x].second = j;
+                    break;
+                } 
+            }
+        }
+    }
+
+    // debug(dp);
+
+    int target = -1;
+    for (int x = 1; x <= 1023; x++) {
+        if (dp[n][x].first) { target = x; break; }
+    }
+
+    if (target == -1) {
+        cout << "NIE" << endl;
+        return;
+    }
+    cout << "TAK" << endl;
+    vector<int> choice(n);
+    int cur = target;
+    for (int i = n; i >= 1; --i) {
+        int j = dp[i][cur].second; // column chosen at row i-1
+        choice[i-1] = j;
+        cur ^= a[i-1][j]; // move to previous XOR
+    }
+
+    for (int i = 0; i < n; i++) {
+        cout << (choice[i] + 1) << (i + 1 == n ? '\n' : ' ');
+    }
+
 }
 
  
