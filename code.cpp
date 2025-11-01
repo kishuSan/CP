@@ -29,60 +29,9 @@ template <class T> void _print(set <T> v) {cerr << "[ "; for (T i : v) {_print(i
 template <class T> void _print(multiset <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]";}
 template <class T, class V> void _print(map <T, V> v) {cerr << "[ "; for (auto i : v) {_print(i); cerr << " ";} cerr << "]";}
 
-
-// void solve(){
-//     int n;
-//     cin >> n;
-//     vector<int> b(n);
-//     for(int &i : b) cin >> i;
-
-//     unordered_map<int, int> freq;
-//     for(int i = 0; i < n; i++) freq[b[i]]++;
-
-//     for(auto node : freq){
-//         if(node.first != node.second){
-//             cout << -1 << endl;
-//             return;
-//         }
-//     }
-
-//     for(int i = 0; i < n; i++){
-//         cout << b[i] << " ";
-//     }
-//     cout << endl;
-        
-// }
-
 void solve(){
-    int a, b;
-    cin >> a >> b;
-    // debug(a);
-    // debug(b);
-    int maxi = -1;
-    set<int> fact;
-    for(int i = 1; i*i <= b; i++){
-        if(b % i == 0){
-            //root
-            debug(i);
-            debug(b/i);
-            fact.insert(i);
-            fact.insert(b/i);
-            int root_pair = b/i;
-            int updated_a = a * root_pair;
-            int sum = updated_a + i;
-            // debug(sum);
-            if(sum % 2 == 0){
-                maxi = max(maxi, sum);
-                // cout << sum << endl;
-                // return;
-            }
-        }
-    }
-    // cout << -1 << endl;
-    debug(fact);
-    cout << maxi << endl;
-    return;
 }
+
 
 
 signed main() {
