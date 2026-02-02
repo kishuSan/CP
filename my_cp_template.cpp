@@ -29,34 +29,11 @@ template <class T> void _print(set <T> v) {cerr << "[ "; for (T i : v) {_print(i
 template <class T> void _print(multiset <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]";}
 template <class T, class V> void _print(map <T, V> v) {cerr << "[ "; for (auto i : v) {_print(i); cerr << " ";} cerr << "]";}
 
+
 void solve(){
-    int x, k;
-    cin >> x >> k;
-
-    if(k > x)
-    {
-        cout << 1 << endl << x << endl;
-        return;
-    }
-    else if(k == x)
-    {
-        cout << 2 << endl << x-1 << " " << 1 << endl;
-        return;
-    }
-
-    vector<int> ans;
-    while(x)
-    {
-        int curr = x;
-        while(curr%k == 0) --curr;
-        ans.push_back(curr);
-        x -= curr;
-    }
-
-    cout << ans.size() << endl;
-    for(int ele : ans) cout << ele << " ";
-    cout << endl;
+      
 }
+
 
 signed main() {
     auto begin = std::chrono::high_resolution_clock::now();
